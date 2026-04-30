@@ -46,8 +46,47 @@ function removerLivro(indice: number): void {
     }
 }
 
-// --- TESTES DA NOVA ETAPA  ---
+// --- BUSCA E FILTROS ---
+
+function buscarPorTitulo(termo: string): number[] {
+    const indicesEncontrados: number[] = [];
+    
+    titulos.forEach((titulo, i) => {
+        // O includes() verifica se a palavra digitada existe dentro do título
+        if (titulo.toLowerCase().includes(termo.toLowerCase())) {
+            indicesEncontrados.push(i);
+        }
+    });
+    
+    return indicesEncontrados;
+}
+
+function listarPorAutor(autorBusca: string): string[] {
+    //'map' junta os dados paralelos em objetos temporários
+    //'filter' pega apenas os livros do autor pesquisado
+    //O último 'map' devolve apenas um array com os nomes dos livros
+    
+    return titulos
+        .map((titulo, i) => ({ nome: titulo, autor: autores[i]! }))
+        .filter(livro => livro.autor.toLowerCase().includes(autorBusca.toLowerCase()))
+        .map(livro => livro.nome);
+}
+
+// --- TESTES  ---
 adicionarLivro("Código Limpo", "Robert C. Martin", 2008, 464);
 adicionarLivro("Arquitetura Limpa", "Robert C. Martin", 2017, 432);
-removerLivro(4); // Remove "Percy Jackson e o Ladrão de Raios"
+removerLivro(3); // Remove "Percy Jackson e o Ladrão de Raios"
 exibirBiblioteca();
+
+// --- TESTES DA ETAPA DE BUSCA E FILTRO ---
+console.log("\n--- RESULTADOS DA BUSCA ---");
+
+// Testando a busca por título (pesquisando pela palavra "Guia")
+const resultadosBusca = buscarPorTitulo("guia");
+console.log(`Índices encontrados para 'guia': [${resultadosBusca}]`);
+resultadosBusca.forEach(i => console.log(`Livro: "${titulos[i]}"`));
+
+// Testando o filtro por autor (pesquisando pelos livros que adicionamos na Etapa 3)
+const livrosDoTioBob = listarPorAutor("Robert C. Martin");
+console.log(`\nLivros do autor Robert C. Martin:`);
+console.log(livrosDoTioBob);
