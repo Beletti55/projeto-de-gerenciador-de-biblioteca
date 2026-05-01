@@ -172,38 +172,42 @@ function exibirPorDecada(): void {
     });
 }
 
-// --- TESTES  ---
+// =========================================================
+// === DEMONSTRAÇÃO FINAL ==================================
+// =========================================================
+
+console.log("\n==================================================");
+console.log("🌟 BEM-VINDO AO GERENCIADOR DE BIBLIOTECA 🌟");
+console.log("==================================================\n");
+
+console.log("➤ 1. ESTADO INICIAL DA BIBLIOTECA:");
+exibirBiblioteca();
+
+console.log("\n➤ 2. TESTANDO CADASTRO E REMOÇÃO:");
 adicionarLivro("Código Limpo", "Robert C. Martin", 2008, 464);
 adicionarLivro("Arquitetura Limpa", "Robert C. Martin", 2017, 432);
 removerLivro(3);
-exibirBiblioteca();
 
-console.log("\n--- RESULTADOS DA BUSCA ---");
-
+console.log("\n➤ 3. TESTANDO BUSCAS:");
 const resultadosBusca = buscarPorTitulo("guia");
-console.log(`Índices encontrados para 'guia': [${resultadosBusca}]`);
-resultadosBusca.forEach(i => console.log(`Livro: "${titulos[i]}"`));
+console.log(`   Busca por 'guia' (índices): [${resultadosBusca}]`);
+console.log(`   Livros de 'Robert C. Martin':`, listarPorAutor("Robert C. Martin"));
 
-const livrosDoTioBob = listarPorAutor("Robert C. Martin");
-console.log(`\nLivros do autor Robert C. Martin:`);
-console.log(livrosDoTioBob);
+console.log("\n➤ 4. TESTANDO STATUS DE LEITURA:");
+marcarComoLido(4, 5);
+console.log(`   Lista de Lidos:`, listarLidos());
+console.log(`   Lista de Pendentes:`, listarPendentes());
 
-console.log("\n--- TESTANDO STATUS DE LEITURA ---");
+console.log("\n➤ 5. ESTATÍSTICAS ATUALIZADAS:");
+console.log(`   Total de livros: ${totalLivros()}`);
+console.log(`   Livros lidos: ${totalLidos()} (${percentualLidos().toFixed(2)}%)`);
+console.log(`   Média das avaliações: ${mediaAvaliacoes().toFixed(2)}`);
+console.log(`   Livro melhor avaliado: ${livroMaiorAvaliacao()}`);
+console.log(`   Total de páginas lidas: ${totalPaginasLidas()}`);
 
-marcarComoLido(4,10);
-
-marcarComoLido(4,5);
-
-console.log("\n📚 Livros já lidos:");
-console.log(listarLidos());
-
-console.log("\n⏳ Livros pendentes:");
-console.log(listarPendentes());
-console.log("\n=== ESTATÍSTICAS ===");
-console.log(`Total de livros: ${totalLivros()}`);
-console.log(`Livros lidos: ${totalLidos()} (${percentualLidos().toFixed(2)}%)`);
-console.log(`Média das avaliações: ${mediaAvaliacoes().toFixed(2)}`);
-console.log(`Livro melhor avaliado: ${livroMaiorAvaliacao()}`);
-console.log(`Total de páginas lidas: ${totalPaginasLidas()}`);
-// --- TESTE DA CLASSIFICAÇÃO POR DÉCADA ---
+console.log("\n➤ 6. CLASSIFICAÇÃO POR DÉCADA:");
 exibirPorDecada();
+
+console.log("\n==================================================");
+console.log("✨ EXECUÇÃO FINALIZADA COM SUCESSO ✨");
+console.log("==================================================\n");
