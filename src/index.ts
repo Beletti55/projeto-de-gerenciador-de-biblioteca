@@ -72,6 +72,34 @@ function listarPorAutor(autorBusca: string): string[] {
         .map(livro => livro.nome);
 }
 
+// --- STATUS DE LEITURA ---
+
+function marcarComoLido(indice: number, avaliacao: number): void {
+    // 1. Validar se o livro existe
+    if (indice < 0 || indice >= titulos.length) {
+        console.log(`\n❌ Erro: Índice ${indice} não encontrado.`);
+        return; // O return vazio para a execução da função aqui
+    }
+
+    // 2. Validar se a avaliação está entre 1 e 5
+    if (avaliacao >= 1 && avaliacao <= 5) {
+        lido[indice] = true;
+        avaliacoes[indice] = avaliacao;
+        console.log(`\n⭐ Livro "${titulos[indice]}" marcado como LIDO com nota ${avaliacao}/5!`);
+    } else {
+        console.log(`\n❌ Erro: A avaliação de "${titulos[indice]}" deve ser entre 1 e 5.`);
+    }
+}
+
+function listarLidos(): string[] {
+    // Usamos o '_' no primeiro parâmetro porque não precisamos do nome do título no momento da checagem, apenas do índice 'i'
+    return titulos.filter((_, i) => lido[i] === true);
+}
+
+function listarPendentes(): string[] {
+    return titulos.filter((_, i) => lido[i] === false);
+}
+
 // --- TESTES  ---
 adicionarLivro("Código Limpo", "Robert C. Martin", 2008, 464);
 adicionarLivro("Arquitetura Limpa", "Robert C. Martin", 2017, 432);
@@ -90,3 +118,18 @@ resultadosBusca.forEach(i => console.log(`Livro: "${titulos[i]}"`));
 const livrosDoTioBob = listarPorAutor("Robert C. Martin");
 console.log(`\nLivros do autor Robert C. Martin:`);
 console.log(livrosDoTioBob);
+
+// --- TESTE DO STATUS DE LEITURA ---
+console.log("\n--- TESTANDO STATUS DE LEITURA ---");
+
+//Tentando marcar com nota inválida (deve dar erro)
+marcarComoLido(4,10);
+
+//Marcando corretamente com nota 5
+marcarComoLido(4,5);
+
+console.log("\n📚 Livros já lidos:");
+console.log(listarLidos());
+
+console.log("\n⏳ Livros pendentes:");
+console.log(listarPendentes());
