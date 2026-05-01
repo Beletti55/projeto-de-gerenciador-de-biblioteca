@@ -146,6 +146,32 @@ function totalPaginasLidas(): number {
         .reduce((acumulador, paginasAtuais) => acumulador + paginasAtuais, 0); // Soma tudo
 }
 
+// --- CLASSIFICAÇÃO ---
+
+function exibirPorDecada(): void {
+    console.log("\n=== POR DÉCADA ===");
+    
+    // 1. Criamos um array só com as décadas de todos os livros
+    const todasAsDecadas = anos.map(ano => Math.floor(ano / 10) * 10);
+    
+    // 2. Usamos o Set para remover as duplicatas e convertemos de volta para array
+    const decadasUnicas = Array.from(new Set(todasAsDecadas));
+    
+    // Ordenamos as décadas em ordem crescente
+    decadasUnicas.sort((a, b) => a - b);
+    
+    // 3. Para cada década única, filtramos os livros que pertencem a ela
+    decadasUnicas.forEach(decada => {
+        const livrosDaDecada = titulos.filter((_, i) => {
+            const ano = anos[i];
+            return ano !== undefined && Math.floor(ano / 10) * 10 === decada;
+        });
+        
+        // O .join(', ') junta os nomes do array em uma única string separada por vírgula
+        console.log(`${decada}s: ${livrosDaDecada.join(", ")}`);
+    });
+}
+
 // --- TESTES  ---
 adicionarLivro("Código Limpo", "Robert C. Martin", 2008, 464);
 adicionarLivro("Arquitetura Limpa", "Robert C. Martin", 2017, 432);
@@ -173,11 +199,11 @@ console.log(listarLidos());
 
 console.log("\n⏳ Livros pendentes:");
 console.log(listarPendentes());
-// --- TESTES DA ETAPA DE ESTATÍSTICAS ---
 console.log("\n=== ESTATÍSTICAS ===");
 console.log(`Total de livros: ${totalLivros()}`);
-// Usando toFixed(2) para deixar o percentual bonitinho (ex: 60.00%)
 console.log(`Livros lidos: ${totalLidos()} (${percentualLidos().toFixed(2)}%)`);
 console.log(`Média das avaliações: ${mediaAvaliacoes().toFixed(2)}`);
 console.log(`Livro melhor avaliado: ${livroMaiorAvaliacao()}`);
 console.log(`Total de páginas lidas: ${totalPaginasLidas()}`);
+// --- TESTE DA CLASSIFICAÇÃO POR DÉCADA ---
+exibirPorDecada();
