@@ -100,32 +100,72 @@ function listarPendentes(): string[] {
     return titulos.filter((_, i) => lido[i] === false);
 }
 
+// --- ESTATÍSTICAS ---
+
+function totalLivros(): number {
+    return titulos.length;
+}
+
+function totalLidos(): number {
+    // Reutilizamos a função que já criamos e contamos quantos itens ela retornou
+    return listarLidos().length;
+}
+
+function percentualLidos(): number {
+    const total = totalLivros();
+    if (total === 0) return 0;
+    return (totalLidos() / total) * 100;
+}
+
+function mediaAvaliacoes(): number {
+    // 1. Filtra as notas apenas dos livros que foram lidos
+    const notasLidos = avaliacoes.filter((_, i) => lido[i]);
+    
+    if (notasLidos.length === 0) return 0;
+    
+    // 2. Soma todas as notas usando reduce
+    const soma = notasLidos.reduce((acumulador, notaAtual) => acumulador + notaAtual, 0);
+    
+    return soma / notasLidos.length;
+}
+
+function livroMaiorAvaliacao(): string {
+    if (titulos.length === 0) return "Nenhum livro cadastrado";
+
+    // O reduce vai comparar as notas e guardar o índice do livro com a maior nota
+    const indiceMaior = avaliacoes.reduce((indiceMax, notaAtual, indiceAtual, arr) => {
+        return notaAtual > (arr[indiceMax] ?? -Infinity) ? indiceAtual : indiceMax;
+    }, 0);
+
+    return titulos[indiceMaior] ?? "Nenhum livro cadastrado";
+}
+
+function totalPaginasLidas(): number {
+    return paginas
+        .filter((_, i) => lido[i]) // Pega apenas as páginas dos livros lidos
+        .reduce((acumulador, paginasAtuais) => acumulador + paginasAtuais, 0); // Soma tudo
+}
+
 // --- TESTES  ---
 adicionarLivro("Código Limpo", "Robert C. Martin", 2008, 464);
 adicionarLivro("Arquitetura Limpa", "Robert C. Martin", 2017, 432);
-removerLivro(3); // Remove "Percy Jackson e o Ladrão de Raios"
+removerLivro(3);
 exibirBiblioteca();
 
-// --- TESTES DA ETAPA DE BUSCA E FILTRO ---
 console.log("\n--- RESULTADOS DA BUSCA ---");
 
-// Testando a busca por título (pesquisando pela palavra "Guia")
 const resultadosBusca = buscarPorTitulo("guia");
 console.log(`Índices encontrados para 'guia': [${resultadosBusca}]`);
 resultadosBusca.forEach(i => console.log(`Livro: "${titulos[i]}"`));
 
-// Testando o filtro por autor (pesquisando pelos livros que adicionamos na Etapa 3)
 const livrosDoTioBob = listarPorAutor("Robert C. Martin");
 console.log(`\nLivros do autor Robert C. Martin:`);
 console.log(livrosDoTioBob);
 
-// --- TESTE DO STATUS DE LEITURA ---
 console.log("\n--- TESTANDO STATUS DE LEITURA ---");
 
-//Tentando marcar com nota inválida (deve dar erro)
 marcarComoLido(4,10);
 
-//Marcando corretamente com nota 5
 marcarComoLido(4,5);
 
 console.log("\n📚 Livros já lidos:");
@@ -133,3 +173,11 @@ console.log(listarLidos());
 
 console.log("\n⏳ Livros pendentes:");
 console.log(listarPendentes());
+// --- TESTES DA ETAPA DE ESTATÍSTICAS ---
+console.log("\n=== ESTATÍSTICAS ===");
+console.log(`Total de livros: ${totalLivros()}`);
+// Usando toFixed(2) para deixar o percentual bonitinho (ex: 60.00%)
+console.log(`Livros lidos: ${totalLidos()} (${percentualLidos().toFixed(2)}%)`);
+console.log(`Média das avaliações: ${mediaAvaliacoes().toFixed(2)}`);
+console.log(`Livro melhor avaliado: ${livroMaiorAvaliacao()}`);
+console.log(`Total de páginas lidas: ${totalPaginasLidas()}`);
